@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1016871516311",
+    "project_id": "noticia-16301",
+    "storage_bucket": "noticia-16301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016871516311:android:a91e680bcddf14693d11d2",
+        "android_client_info": {
+          "package_name": "com.example.noticia_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLmEr2EnsGiLgP2bn_iet627ho4rNKJbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

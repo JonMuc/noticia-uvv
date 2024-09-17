@@ -1,0 +1,39 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "noticia-16301",
+          "appId": "1:1016871516311:android:a91e680bcddf14693d11d2",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "noticia-16301",
+          "configurations": {
+            "android": "1:1016871516311:android:a91e680bcddf14693d11d2",
+            "ios": "1:1016871516311:ios:1391aa68dea0d2553d11d2",
+            "macos": "1:1016871516311:ios:1391aa68dea0d2553d11d2",
+            "web": "1:1016871516311:web:147e72731a3c584c3d11d2",
+            "windows": "1:1016871516311:web:6777ca26e3c700d73d11d2"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
