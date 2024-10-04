@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:noticia_app/firebase_options.dart';
 import 'package:noticia_app/services/login-service.dart';
 import 'package:noticia_app/views/login-page.dart';
+import 'package:noticia_app/views/shared/verificarlogin-page.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -44,7 +45,7 @@ class _NoticiaApp extends State<NoticiaApp> {
       locale: _locale,
       title: 'noticia',
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: VerificarLoginPage(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

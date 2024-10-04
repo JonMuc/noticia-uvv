@@ -1,7 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noticia_app/models/news-model.dart';
+import 'package:noticia_app/models/usuario-model.dart';
+import 'package:noticia_app/services/login-service.dart';
 import 'package:noticia_app/views/criar-conta-page.dart';
+import 'package:noticia_app/views/login-page.dart';
+import 'package:noticia_app/views/shared/drawer.dart';
 import 'package:noticia_app/views/widget/post-item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardPage extends StatefulWidget {
 
@@ -12,6 +20,11 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPage extends State<DashboardPage> {
+  Usuario? usuario;
+
+  List<News?> listaNews = List<News?>.filled(
+      0, null,
+      growable: true);
 
   final List<Map<String, dynamic>> posts = [
     {
@@ -38,22 +51,69 @@ class _DashboardPage extends State<DashboardPage> {
   ];
 
   @override
+  void initState() {
+    obterNoticia();
+    super.initState();
+  }
+
+  obterNoticia() async{
+    LoginService service = LoginService();
+    var result = await service.listarNoticias();
+
+    setState(() {
+      listaNews = result;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Notícia UVV'),
+        leading: Builder(
+          builder: (context) {
+            return IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            );
+          },
+        ),
+      ),
+      drawer: DrawerPage(),
       body: ListView.builder(
-        itemCount: posts.length,
+        itemCount: listaNews.length,
         itemBuilder: (context, index) {
-          final post = posts[index];
+          final post = listaNews[index];
           return PostItem(
-            username: post['username'],
-            imageUrl: post['image'],
-            description: post['description'],
-            likes: post['likes'],
-            comments: post['comments'],
+            username: post!.nomePortal,
+            imageUrl: post.imgUrl,
+            url: post.url,
+            description: post.title,
+            likes: post.likes,
+            comments: 0,
+            idNoticia: post.id,
           );
         },
       ),
     );
   }
 
+  deslogar() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.remove("usuario");
+
+    Navigator.pop(context); // Fecha o drawer
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Deslogando...')),
+    );
+
+    Timer(Duration(seconds: 1), (){
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+              (route) => false);
+    });
+  }
 }

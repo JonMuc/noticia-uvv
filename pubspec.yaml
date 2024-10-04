@@ -18,6 +18,12 @@ dependencies:
   firebase_core: ^3.1.1
   provider: ^6.1.2
   dio: ^5.0.0
+  shared_preferences: ^2.2.2
+  jwt_decoder: ^2.0.1
+  url_launcher: ^6.3.0
+  webview_flutter_web: ^0.2.3+2
+  cached_network_image: ^3.4.0
+
 
 dev_dependencies:
   flutter_test:
@@ -36,4 +42,7 @@ flutter:
     - assets/sol.jpg
     - assets/montanha.jpg
     - assets/piza.jpg
+    - assets/logo_g1.png
+    - assets/logo_record.png
+    - assets/logo_cnn.png
 
