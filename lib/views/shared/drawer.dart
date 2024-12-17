@@ -5,6 +5,7 @@ import 'package:noticia_app/models/usuario-model.dart';
 import 'package:noticia_app/services/login-service.dart';
 import 'package:noticia_app/views/dashboard-page.dart';
 import 'package:noticia_app/views/login-page.dart';
+import 'package:noticia_app/views/noticias-salvas-page.dart';
 import 'package:noticia_app/views/perfil-page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,7 +55,7 @@ class _DrawerPage extends State<DrawerPage> {
                 ),
                 SizedBox(height: 10.0),
                 Text(
-                  usuario == null ? "" : usuario!.nome,
+                  usuario == null ? "" : usuario!.nome!,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 24.0,
@@ -75,6 +76,13 @@ class _DrawerPage extends State<DrawerPage> {
             title: Text('Perfil'),
             onTap: () {
               navegarPerfil();
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.newspaper),
+            title: Text('Notícias salvas'),
+            onTap: () {
+              navegarNoticiasSalvas();
             },
           ),
           ListTile(
@@ -99,6 +107,13 @@ class _DrawerPage extends State<DrawerPage> {
           MaterialPageRoute(builder: (context) => LoginPage()),
               (route) => false);
     });
+  }
+
+  navegarNoticiasSalvas() async{
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => NoticiasSalvasPage()),
+            (route) => false);
   }
 
   navegarPerfil() async{

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noticia_app/services/login-service.dart';
@@ -76,10 +78,12 @@ class _LoginPageState extends State<LoginPage> {
     var service = new LoginService();
     var result = await service.login(emailController.text, passwordController.text);
     if(result){
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DashboardPage()));
+      Timer(Duration(seconds: 1), (){
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DashboardPage()));
+      });
     }else{
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Usuário ou senha inválidos!')),

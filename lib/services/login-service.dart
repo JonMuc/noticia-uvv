@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:noticia_app/models/comentario-model.dart';
 import 'package:noticia_app/models/news-model.dart';
 import 'package:noticia_app/models/token-model.dart';
 import 'package:noticia_app/models/usuario-model.dart';
@@ -10,6 +11,7 @@ import 'package:noticia_app/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginService extends ChangeNotifier {
+  String? idUsuarioVisualizar;
 
   Future<Usuario> criarConta(String nome, String email, String senha) async{
     var url = "${Settings.apiNovaUrl}users";
@@ -79,9 +81,6 @@ class LoginService extends ChangeNotifier {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var result = sharedPreferences.get("usuario");
 
-    print(123123223);
-    print(result);
-
     return result == null ? false : true;
   }
 
@@ -91,8 +90,25 @@ class LoginService extends ChangeNotifier {
     return usuarioModel;
   }
 
+  Future<Usuario> obterUsuarioVisualizar() async {
+    var user = await obterUsuarioLogado();
+
+    var url = "${Settings.apiNovaUrl}profile/" + idUsuarioVisualizar! + "?idSession=" + user.id!;
+
+    print(url);
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    var result = await dio.get(url);
+
+    var usuario = Usuario.fromJson(result.data);
+
+    return usuario;
+  }
+
   Future<List<News>> listarNoticias() async {
-    var url = "${Settings.apiNovaUrl}noticias";
+    var user = await obterUsuarioLogado();
+    var url = "${Settings.apiNovaUrl}view-noticias/" + user.id!;
 
     Dio dio = new Dio();
     dio.options.headers["content-type"] = 'application/json';
@@ -121,5 +137,107 @@ class LoginService extends ChangeNotifier {
     dio.options.headers["content-type"] = 'application/json';
     dio.options.headers["accept"] = 'application/json';
     await dio.post(url, data : data);
+  }
+
+  Future salvarNoticia(String idNoticia, bool curtiu) async {
+    var usuario = await obterUsuarioLogado();
+
+    var url = "${Settings.apiNovaUrl}favorites";
+
+    Map data = {
+      'idNoticia': idNoticia,
+      'idUsuario': usuario.id,
+      'favorite': curtiu,
+    };
+
+    print(data);
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    await dio.post(url, data : data);
+  }
+
+  Future comentarNoticia(String idNoticia, String comentario) async {
+    var usuario = await obterUsuarioLogado();
+
+    var url = "${Settings.apiNovaUrl}comentarios";
+
+    Map data = {
+      'idNoticia': idNoticia,
+      'idUsuario': usuario.id,
+      'content': comentario,
+    };
+
+    print(data);
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    await dio.post(url, data : data);
+  }
+
+  Future<List<Comentario>> listarComentarios(String idNoticia) async {
+    var user = await obterUsuarioLogado();
+    var url = "${Settings.apiNovaUrl}comentarios/" + idNoticia;
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    var result = await dio.get(url);
+
+    return (result.data as List)
+        .map((obj) => Comentario.fromJson(obj))
+        .toList();
+  }
+
+  Future<List<News>> listarNoticiasSalvas() async {
+    var user = await obterUsuarioLogado();
+    var url = "${Settings.apiNovaUrl}view-noticias/filter/" + user.id! + "?favorited=true";
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    var result = await dio.get(url);
+
+    return (result.data as List)
+        .map((obj) => News.fromJson(obj))
+        .toList();
+  }
+
+  Future seguirUsuario() async {
+    var usuario = await obterUsuarioLogado();
+
+    var url = "${Settings.apiNovaUrl}followers/" + idUsuarioVisualizar! + "/follow/" + usuario.id!;
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    await dio.post(url);
+  }
+
+  Future desseguirUsuario() async {
+    var usuario = await obterUsuarioLogado();
+
+    var url = "${Settings.apiNovaUrl}followers/" + idUsuarioVisualizar! + "/unfollow/" + usuario.id!;
+
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    await dio.delete(url);
+  }
+
+  Future<News> obterNoticia(String idNoticia) async {
+    var url = "${Settings.apiNovaUrl}noticias/" + idNoticia!;
+
+    print(url);
+    Dio dio = new Dio();
+    dio.options.headers["content-type"] = 'application/json';
+    dio.options.headers["accept"] = 'application/json';
+    var result = await dio.get(url);
+
+    var usuario = News.fromJson(result.data);
+
+    return usuario;
   }
 }

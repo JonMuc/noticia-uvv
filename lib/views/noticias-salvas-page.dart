@@ -6,21 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:noticia_app/models/news-model.dart';
 import 'package:noticia_app/models/usuario-model.dart';
 import 'package:noticia_app/services/login-service.dart';
-import 'package:noticia_app/views/criar-conta-page.dart';
 import 'package:noticia_app/views/login-page.dart';
 import 'package:noticia_app/views/shared/drawer.dart';
 import 'package:noticia_app/views/widget/post-item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DashboardPage extends StatefulWidget {
+class NoticiasSalvasPage extends StatefulWidget {
 
-  DashboardPage({Key? key}) : super(key: key);
+  NoticiasSalvasPage({Key? key}) : super(key: key);
 
   @override
-  _DashboardPage createState() => _DashboardPage();
+  _NoticiasSalvasPage createState() => _NoticiasSalvasPage();
 }
 
-class _DashboardPage extends State<DashboardPage> {
+class _NoticiasSalvasPage extends State<NoticiasSalvasPage> {
   Usuario? usuario;
   bool isEsporteSelected = false;
   bool isTecnologiaSelected = false;
@@ -45,7 +44,7 @@ class _DashboardPage extends State<DashboardPage> {
 
   obterNoticia() async{
     LoginService service = LoginService();
-    var result = await service.listarNoticias();
+    var result = await service.listarNoticiasSalvas();
 
     setState(() {
       listaNews = result;
@@ -60,7 +59,7 @@ class _DashboardPage extends State<DashboardPage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Notícia UVV'),
+            Text('Notícias salvas'),
             GestureDetector(
               onTap: showFilterModal,
               child: Icon(Icons.search_rounded, size: 30,),

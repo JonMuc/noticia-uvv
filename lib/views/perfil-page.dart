@@ -69,7 +69,7 @@ class _PerfilPage extends State<PerfilPage> {
             ),
             SizedBox(height: 5.0),
             Text(
-              usuario == null ? "" : usuario!.nome,
+              usuario == null ? "" : usuario!.nome!,
               style: TextStyle(
                 fontSize: 16.0,
               ),
@@ -84,7 +84,7 @@ class _PerfilPage extends State<PerfilPage> {
             ),
             SizedBox(height: 5.0),
             Text(
-              usuario == null ? "" : usuario!.email,
+              usuario == null ? "" : usuario!.email!,
               style: TextStyle(
                 fontSize: 16.0,
               ),
